@@ -1,0 +1,2 @@
+driver_names = ['Alonso', 'Ocon', 'Bottas', 'Zhou', 'Verstappen', 'Perez', 'Sainz', 'Leclerc', 'Magnussen', 'Schumacher',
+                'Ricciardo', 'Norris', 'Hamilton', 'Russel', 'Albon', 'Latifi', 'Vettel', 'Stroll', 'Gasly', 'Yuki']
