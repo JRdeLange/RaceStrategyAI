@@ -13,14 +13,18 @@ class Track:
         self.cars = []
         self.drivers = []
         self.timescale = 3
-        self.length = 1000
-        self.laps = 3
-        self.race_length = self.length * self.laps
+        self.track_length = 1000
+        self.laps = 5
+        self.race_length = self.track_length * self.laps
         self.curr_lap = 0
+        self.race_control = None
 
         # Flags
         self.full_course_yellow = False
         self.chequered_flag = False
+        
+    def set_race_control(self, race_control):
+        self.race_control = race_control
 
     def cars_to_grid(self, n):
         print(n, len(self.drivers))
@@ -57,8 +61,6 @@ class Track:
         return car.distance_driven
 
     def check_if_race_over(self):
-        for car in self.cars:
-            if not self.chequered_flag and car.distance_driven > self.race_length:
-                self.chequered_flag = True
-                print("finished!")
-                break
+        if not self.chequered_flag and self.cars[0].distance_driven > self.race_length:
+            self.chequered_flag = True
+            print("finished!")

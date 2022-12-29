@@ -7,5 +7,5 @@ class Driver:
         self.track = track
         self.name = name
         self.nr = nr
-        # use from 33 to 67 percent per race
-        self.tyre_usage = random.randint(33, 67) / self.track.race_length
+        # use from 11 to 22 percent per lap
+        self.tyre_usage = random.randint(11, 22) / self.track.track_length

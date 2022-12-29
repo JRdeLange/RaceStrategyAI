@@ -20,25 +20,39 @@ class Car:
         self.height = 16
 
         self.pit_in = False
+        self.pit_timer = 0
 
     def drive(self):
-        # Speed in kmh
-        speed = (self.car_base_speed + self.tyres) + 25 - random.randint(0, 50)
-        # Race over, drive slowly
-        if self.distance_driven > self.track.race_length:
-            speed = 100
+        if self.pit_timer <= 0:
+            # Speed in kmh
+            speed = (self.car_base_speed + self.tyres) + 25 - random.randint(0, 50)
+            # Race over, drive slowly
+            if self.distance_driven > self.track.race_length:
+                speed = 100
 
-        # 60 fps, so kmh -> m per frame is * 1000 / 60(min) / 60(sec) / 60(fps) = / 216
-        speed /= 216
+            # 60 fps, so kmh -> m per frame is * 1000 / 60(min) / 60(sec) / 60(fps) = / 216
+            speed /= 216
 
-        # apply timescale
-        speed *= self.track.timescale
+            # apply timescale
+            speed *= self.track.timescale
 
-        # wear tyres by distance driven this frame
-        self.tyres -= self.driver.tyre_usage * speed
+            # wear tyres by distance driven this frame
+            self.tyres -= self.driver.tyre_usage * speed
 
-        # drive
-        self.distance_driven += speed
+            # drive
+            self.distance_driven += speed
+        else:
+            self.pit_timer -= 1/60
+            if self.pit_timer <= 0:
+                self.pit_in = False
+                self.tyres = 100
 
-    def pit(self):
-        self.pit_in = True
+    def pit_this_lap(self):
+        if not self.finished:
+            self.pit_in = True
+
+    def cross_finish_line(self):
+        if self.track.chequered_flag:
+            self.finished = True
+        if self.pit_in:
+            self.pit_timer = 4

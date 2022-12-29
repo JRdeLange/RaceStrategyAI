@@ -21,6 +21,7 @@ class Renderer:
         self.show_tyre_condition = True
 
         self.init_pygame()
+        self.running = True
 
     def init_pygame(self):
         pygame.init()
@@ -29,6 +30,10 @@ class Renderer:
         pygame.display.set_caption("RSAI v0.1")
 
     def tick(self):
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                self.running = False
+
         self.clear()
         self.draw()
         pygame.display.flip()
@@ -70,12 +75,13 @@ class Renderer:
     def draw_tyre_condition(self, x, y, car):
         x_start = x - car.width / 2
         x_end = x_start + car.width / 100 * car.tyres
-        self.draw_line([x_start, y], [x_end, y], [0, 0, 180], 5)
+        y = y + car.height / 2 - 4
+        self.draw_line([x_start, y], [x_end, y], [100, 100, 180], 3)
 
     def get_car_coordinates(self, idx, car):
         x_min = car.width / 2
         x_max = self.width - car.width / 2
-        x = x_min + ((x_max - x_min) / self.track.length) * (car.distance_driven % self.track.length)
+        x = x_min + ((x_max - x_min) / self.track.track_length) * (car.distance_driven % self.track.track_length)
         if car.distance_driven > self.track.race_length:
             x = x_max
 
