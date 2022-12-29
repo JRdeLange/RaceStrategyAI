@@ -12,12 +12,14 @@ class Track:
     def __init__(self):
         self.cars = []
         self.drivers = []
+        self.timescale = 3
         self.length = 1000
         self.laps = 3
         self.race_length = self.length * self.laps
         self.curr_lap = 0
 
         # Flags
+        self.full_course_yellow = False
         self.chequered_flag = False
 
     def cars_to_grid(self, n):
@@ -44,16 +46,19 @@ class Track:
         for car in self.cars:
             car.drive()
 
-        if self.chequered_flag:
-            self.cars.sort(reverse=True, key=self.car_distance_getter)
+        self.order_cars()
 
         self.check_if_race_over()
+
+    def order_cars(self):
+        self.cars.sort(reverse=True, key=self.car_distance_getter)
 
     def car_distance_getter(self, car):
         return car.distance_driven
 
     def check_if_race_over(self):
         for car in self.cars:
-            if car.distance_driven > self.race_length:
-                self.chequered_flag = False
+            if not self.chequered_flag and car.distance_driven > self.race_length:
+                self.chequered_flag = True
+                print("finished!")
                 break

@@ -9,6 +9,8 @@ class Car:
         self.driver = driver
         self.color = color
         self.track = track
+        self.finished = False
+        self.on_lap = 0
 
         self.fuel = 100
         self.tyres = 100
@@ -16,6 +18,8 @@ class Car:
         self.distance_driven = 0
         self.width = 44
         self.height = 16
+
+        self.pit_in = False
 
     def drive(self):
         # Speed in kmh
@@ -27,8 +31,14 @@ class Car:
         # 60 fps, so kmh -> m per frame is * 1000 / 60(min) / 60(sec) / 60(fps) = / 216
         speed /= 216
 
+        # apply timescale
+        speed *= self.track.timescale
+
         # wear tyres by distance driven this frame
         self.tyres -= self.driver.tyre_usage * speed
 
         # drive
         self.distance_driven += speed
+
+    def pit(self):
+        self.pit_in = True

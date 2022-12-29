@@ -18,6 +18,7 @@ class Renderer:
         self.height = 400
         self.window = None
         self.clock = None
+        self.show_tyre_condition = True
 
         self.init_pygame()
 
@@ -63,12 +64,19 @@ class Renderer:
     def draw_car(self, idx, car):
         x, y = self.get_car_coordinates(idx, car)
         self.draw_rect(x, y, car.width, car.height, car.color)
+        if self.show_tyre_condition:
+            self.draw_tyre_condition(x, y, car)
+
+    def draw_tyre_condition(self, x, y, car):
+        x_start = x - car.width / 2
+        x_end = x_start + car.width / 100 * car.tyres
+        self.draw_line([x_start, y], [x_end, y], [0, 0, 180], 5)
 
     def get_car_coordinates(self, idx, car):
         x_min = car.width / 2
         x_max = self.width - car.width / 2
         x = x_min + ((x_max - x_min) / self.track.length) * (car.distance_driven % self.track.length)
-        if not self.track.chequered_flag and car.distance_driven > self.track.race_length:
+        if car.distance_driven > self.track.race_length:
             x = x_max
 
         step_size = self.height / len(self.track.cars)
